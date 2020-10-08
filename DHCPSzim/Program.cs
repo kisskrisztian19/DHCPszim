@@ -11,7 +11,8 @@ namespace DHCPSzim
     {
 
         static List<string> excluded = new List<string>();
-
+        static Dictionary<string, string> dhcp = new Dictionary<string, string>();
+        static Dictionary<string, string> reserved = new Dictionary<string, string>();
         static void BeolvasExcluded()
         {
             try
@@ -58,10 +59,33 @@ namespace DHCPSzim
             }
             return $"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}";
         }
+
+        static void BeolvasDictionary(Dictionary<string, string> d, string filenev)
+        {
+            try
+            {
+                StreamReader file = new StreamReader(filenev);
+                while (!file.EndOfStream)
+                {
+                    string[] adatok = file.ReadLine().Split(';');
+                    d.Add(adatok[0], adatok[1]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
      
         static void Main(string[] args)
         {
             BeolvasExcluded();
+            BeolvasDictionary(dhcp, "dhcp.csv");
+            BeolvasDictionary(reserved, "reserved.csv");
+            foreach (var d in reserved)
+            {
+                Console.WriteLine(d);
+            }
             Console.WriteLine("\nVége...");
             Console.ReadLine();
         }
