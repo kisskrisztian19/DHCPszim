@@ -13,16 +13,17 @@ namespace DHCPSzim
         static List<string> excluded = new List<string>();
         static Dictionary<string, string> dhcp = new Dictionary<string, string>();
         static Dictionary<string, string> reserved = new Dictionary<string, string>();
-        static void BeolvasExcluded()
+        static List<string> commands = new List<string>();
+        static void BeolvasList(List<string> l, string filename)
         {
             try
             {
-                StreamReader file = new StreamReader("excluded.csv");
+                StreamReader file = new StreamReader(filename);
                 try
                 {
                     while (!file.EndOfStream)
                     {
-                        excluded.Add(file.ReadLine());
+                        l.Add(file.ReadLine());
                     }
                 }
                 catch (Exception ex)
@@ -79,10 +80,11 @@ namespace DHCPSzim
      
         static void Main(string[] args)
         {
-            BeolvasExcluded();
+            BeolvasList(excluded, "excluded.csv");
+            BeolvasList(commands, "test.csv");
             BeolvasDictionary(dhcp, "dhcp.csv");
             BeolvasDictionary(reserved, "reserved.csv");
-            foreach (var d in reserved)
+            foreach (var d in commands)
             {
                 Console.WriteLine(d);
             }
